@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متجر الأحذية</title>
+<title>المتجر</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <script type="module">
@@ -364,7 +364,7 @@ footer p{color:#333;font-size:12px}
 
 <!-- LOADING -->
 <div id="loadingScreen">
-  <div class="load-logo" id="loadLogo">SHOE</div>
+  <div class="load-logo" id="loadLogo">STORE</div>
   <div class="load-bar"><div class="load-bar-inner"></div></div>
   <div class="load-txt">جاري تحميل المتجر...</div>
 </div>
@@ -408,7 +408,7 @@ footer p{color:#333;font-size:12px}
       <div class="step-body">
         <h4>إعدادات المتجر</h4>
         <div class="cfg-grid">
-          <div class="cfg-field"><label>اسم المتجر</label><input type="text" id="s_storeName" placeholder="SHOE STORE"></div>
+          <div class="cfg-field"><label>اسم المتجر</label><input type="text" id="s_storeName" placeholder="STORE STORE"></div>
           <div class="cfg-field"><label>العملة</label><input type="text" id="s_currency" placeholder="دج"></div>
           <div class="cfg-field"><label>كلمة سر الإدارة *</label><input type="password" id="s_pass" placeholder="اختر كلمة سر قوية"></div>
           <div class="cfg-field"><label>Bot Token (تليغرام)</label><input type="text" id="s_tgToken" placeholder="اختياري"></div>
@@ -428,7 +428,7 @@ footer p{color:#333;font-size:12px}
 <nav>
   <div class="logo" id="navLogo" onclick="scrollTo(0,0)">
     <img id="navLogoImg" src="" alt="" class="nav-logo-img" style="display:none">
-    <span id="navLogoText">SHOE</span>
+    <span id="navLogoText">STORE</span>
   </div>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart()">
@@ -443,10 +443,10 @@ footer p{color:#333;font-size:12px}
 <div class="hero" id="heroSection">
   <img id="heroLogo" src="" alt="" style="display:none">
   <div>
-    <div class="hero-tag">أحذية فاخرة — أناقة وراحة</div>
-    <h1 id="heroTitle">SHOE<br><span>STORE</span></h1>
-    <p id="heroSub">تشكيلة حصرية من الأحذية الفاخرة بأجود الخامات</p>
-    <button class="hero-btn" onclick="document.getElementById('product-section').scrollIntoView({behavior:'smooth'})">اطلب الآن 👠</button>
+    <div class="hero-tag">أزياء وأحذية — أناقة وراحة</div>
+    <h1 id="heroTitle">STORE<br><span>STORE</span></h1>
+    <p id="heroSub">تشكيلة حصرية من الملابس والأحذية بأجود الخامات</p>
+    <button class="hero-btn" onclick="document.getElementById('product-section').scrollIntoView({behavior:'smooth'})">اطلب الآن 🛍</button>
   </div>
 </div>
 
@@ -454,7 +454,7 @@ footer p{color:#333;font-size:12px}
 <section id="product-section">
   <div id="productDisplay">
     <div style="text-align:center;padding:80px 20px;color:#333">
-      <span style="font-size:60px;display:block;margin-bottom:16px">👠</span>
+      <span style="font-size:60px;display:block;margin-bottom:16px">🛍</span>
       <p style="font-size:16px">جاري تحميل المنتج...</p>
     </div>
   </div>
@@ -470,7 +470,7 @@ footer p{color:#333;font-size:12px}
 <div class="overlay-bg" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-side" id="cartSide">
   <div class="cart-hd"><h3>🛍 سلة التسوق</h3><button class="xbtn" onclick="toggleCart()">✕</button></div>
-  <div class="cart-list" id="cartList"><div class="cart-empty-msg"><span>👠</span>السلة فارغة</div></div>
+  <div class="cart-list" id="cartList"><div class="cart-empty-msg"><span>🛍</span>السلة فارغة</div></div>
   <div class="cart-ft">
     <div class="cart-tot"><span>المجموع</span><strong id="cartTotal2">0 دج</strong></div>
     <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>إتمام الطلب ←</button>
@@ -551,8 +551,8 @@ footer p{color:#333;font-size:12px}
 <div class="modal" id="secondColorModal">
   <div class="modal-box" style="max-width:380px">
     <button class="close-modal" onclick="closeModal('secondColorModal')">✕</button>
-    <h3>🎨 اختر اللون الثاني</h3>
-    <p>عند طلب زوجين يمكنك اختيار لون مختلف للزوج الثاني</p>
+    <h3>🎨 اختر لون القطعة الثانية</h3>
+    <p>عند طلب قطعتين يمكنك اختيار لون مختلف للقطعة الثانية</p>
     <div id="secondColorOptions" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px"></div>
     <button onclick="confirmSecondColor()" class="place-btn">✅ تأكيد</button>
   </div>
@@ -592,7 +592,7 @@ footer p{color:#333;font-size:12px}
     <p>البيانات تُحفظ مباشرة على Firebase — يراها جميع الزبائن فوراً 🔥</p>
     <div class="admin-tabs">
       <button class="atab active" onclick="switchTab('orders',this)">📦 الطلبات</button>
-      <button class="atab" onclick="switchTab('product',this)">👠 المنتج</button>
+      <button class="atab" onclick="switchTab('product',this)">🛍 المنتج</button>
       <button class="atab" onclick="switchTab('delivery',this)">🚚 التوصيل</button>
       <button class="atab" onclick="switchTab('settings',this)">⚙️ الإعدادات</button>
     </div>
@@ -605,8 +605,8 @@ footer p{color:#333;font-size:12px}
 
     <!-- PRODUCT FORM -->
     <div class="atab-content" id="tab-product">
-      <div class="sec-ttl">إعداد المنتج الوحيد 👠</div>
-      <p style="font-size:12px;color:#555;margin-bottom:16px">عدّل بيانات الحذاء هنا — التغييرات تظهر فوراً للزبائن</p>
+      <div class="sec-ttl">إعداد المنتج الوحيد 🛍</div>
+      <p style="font-size:12px;color:#555;margin-bottom:16px">عدّل بيانات المنتج هنا — التغييرات تظهر فوراً للزبائن</p>
       <div class="p-form">
         <!-- صور -->
         <div style="margin-bottom:16px">
@@ -640,21 +640,21 @@ footer p{color:#333;font-size:12px}
         </div>
         <!-- بيانات -->
         <div class="p-form-grid">
-          <div class="afield"><label>اسم المنتج *</label><input type="text" id="pName" placeholder="حذاء سهرة فاخر"></div>
-          <div class="afield"><label>السعر العادي (زوج واحد) *</label><input type="number" id="pPrice" placeholder="3500"></div>
+          <div class="afield"><label>اسم المنتج *</label><input type="text" id="pName" placeholder="اسم المنتج"></div>
+          <div class="afield"><label>السعر *</label><input type="number" id="pPrice" placeholder="3500"></div>
           <div class="afield"><label>السعر القديم (قبل التخفيض)</label><input type="number" id="pOld" placeholder="اتركه فارغاً إن لم يكن هناك تخفيض"></div>
           <div class="afield"><label>الكمية في المخزون</label><input type="number" id="pStock" placeholder="10" min="0"></div>
         </div>
         <!-- عروض الكميات -->
         <div style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:14px;margin-bottom:14px">
           <div class="sec-ttl" style="margin-bottom:10px">🏷️ عروض الكميات (اختياري)</div>
-          <p style="font-size:12px;color:#555;margin-bottom:12px">مثال: زوجان بـ180 دج بدل 200 دج — يظهر للزبون تلقائياً</p>
+          <p style="font-size:12px;color:#555;margin-bottom:12px">مثال: قطعتان بـ180 دج بدل 200 دج — يظهر للزبون تلقائياً</p>
           <div id="offersBuilder"></div>
           <button onclick="addOfferRow()" style="background:none;border:1px dashed #2a2a2a;color:#666;padding:8px 16px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;border-radius:6px;margin-top:8px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#2a2a2a';this.style.color='#666'">+ إضافة عرض</button>
         </div>
         <div class="afield" style="margin-bottom:12px">
           <label>وصف المنتج</label>
-          <textarea id="pDesc" rows="3" placeholder="صف الحذاء: المواد، المناسبات، المميزات..." style="background:#151515;border:1px solid #252525;color:#f0ebe2;padding:10px 13px;font-family:'Cairo',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;border-radius:8px;margin-top:5px"></textarea>
+          <textarea id="pDesc" rows="3" placeholder="صف المنتج: المواد، المناسبات، المميزات..." style="background:#151515;border:1px solid #252525;color:#f0ebe2;padding:10px 13px;font-family:'Cairo',sans-serif;font-size:13px;outline:none;width:100%;resize:vertical;border-radius:8px;margin-top:5px"></textarea>
         </div>
         <div class="afield" style="margin-bottom:12px">
           <label>الشارة</label>
@@ -667,7 +667,7 @@ footer p{color:#333;font-size:12px}
         <div class="afield" style="margin-bottom:12px">
           <label>المقاسات المتاحة</label>
           <div class="sizes-builder" id="sizesBuilder"></div>
-          <div class="sz-custom"><input type="text" id="szCustom" placeholder="مقاس مخصص مثل 37.5"><button onclick="addCustomSize()">+ إضافة</button></div>
+          <div class="sz-custom"><input type="text" id="szCustom" placeholder="مقاس مخصص"><button onclick="addCustomSize()">+ إضافة</button></div>
         </div>
         <div class="afield" style="margin-bottom:18px">
           <label>الألوان المتاحة</label>
@@ -709,6 +709,7 @@ footer p{color:#333;font-size:12px}
         <div class="afield"><label>العملة</label><input type="text" id="cfgCur"></div>
         <div class="afield"><label>كلمة سر الإدارة</label><input type="password" id="cfgPass"></div>
         <div class="afield"><label>رقم الهاتف (يظهر في الفوتر)</label><input type="text" id="cfgPhone" placeholder="0770123456"></div>
+        <div class="afield"><label>نوع المنتج (يظهر فوق الاسم)</label><input type="text" id="cfgProductTag" placeholder="مثال: 👠 حذاء فاخر أو 👕 قميص قطن"></div>
         <div class="afield" style="grid-column:1/-1"><label>عنوان المكتب (للاستلام)</label><input type="text" id="cfgOfficeAddr" placeholder="مثال: شارع الأمير عبد القادر، الجزائر العاصمة..."></div>
       </div>
       <!-- Logo -->
@@ -717,7 +718,7 @@ footer p{color:#333;font-size:12px}
         <div style="display:flex;align-items:center;gap:14px;margin-top:8px;flex-wrap:wrap">
           <div id="logoPreviewWrap" style="width:80px;height:80px;background:#0a0a0a;border:1px solid #252525;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
             <img id="logoPreviewImg" src="" alt="" style="width:100%;height:100%;object-fit:contain;display:none">
-            <span id="logoPreviewEmpty" style="font-size:28px;opacity:.3">👠</span>
+            <span id="logoPreviewEmpty" style="font-size:28px;opacity:.3">🛍</span>
           </div>
           <div style="flex:1">
             <label style="display:inline-block;background:none;border:1px solid #333;color:#888;padding:9px 18px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;transition:all .2s;border-radius:8px" onmouseover="this.style.borderColor='#c9a84c';this.style.color='#c9a84c'" onmouseout="this.style.borderColor='#333';this.style.color='#888'">
@@ -755,14 +756,14 @@ footer p{color:#333;font-size:12px}
 </div>
 
 <footer>
-  <span class="logo" id="footerLogo">SHOE</span>
+  <span class="logo" id="footerLogo">STORE</span>
   <p id="footerPhone" style="color:#888;font-size:14px;margin-bottom:6px;font-weight:600"></p>
-  <p id="footerTxt">© 2026 SHOE STORE</p>
+  <p id="footerTxt">© 2026 STORE STORE</p>
 </footer>
 
 <script>
 // ══ CONSTANTS ══
-const DEF_SIZES=['35','36','37','38','39','40','41','42','43','44'];
+const DEF_SIZES=['35','36','37','38','39','40','41','42','43','44','XS','S','M','L','XL','XXL'];
 const WILAYAS=[
   {id:1,name:'أدرار'},{id:2,name:'الشلف'},{id:3,name:'الأغواط'},{id:4,name:'أم البواقي'},
   {id:5,name:'باتنة'},{id:6,name:'بجاية'},{id:7,name:'بسكرة'},{id:8,name:'بشار'},
@@ -782,7 +783,7 @@ const WILAYAS=[
 ];
 
 // ══ GLOBALS ══
-let cfg={name:'SHOE STORE',cur:'دج',pass:'',tgToken:'',tgChat:'',phone:'',logo:'',deliveryOffice:{},deliveryHome:{},officeAddr:''};
+let cfg={name:'STORE STORE',cur:'دج',pass:'',tgToken:'',tgChat:'',phone:'',logo:'',deliveryOffice:{},deliveryHome:{},officeAddr:''};
 let theProduct=null;
 let orders=[];
 let cart=[], selSize=null, selColor=null, selQty=1;
@@ -851,7 +852,7 @@ async function completeSetup(){
     messagingSenderId:document.getElementById('s_senderId').value.trim(),
     appId:document.getElementById('s_appId').value.trim(),
   };
-  const storeName=document.getElementById('s_storeName').value.trim()||'SHOE STORE';
+  const storeName=document.getElementById('s_storeName').value.trim()||'STORE STORE';
   const pass=document.getElementById('s_pass').value.trim();
   const cur=document.getElementById('s_currency').value.trim()||'دج';
   const tgToken=document.getElementById('s_tgToken').value.trim();
@@ -918,7 +919,7 @@ function listenOrders(){
 
 // ══ CONFIG ══
 function applyConfig(){
-  const n=cfg.name||'SHOE STORE';
+  const n=cfg.name||'STORE STORE';
   document.getElementById('loadLogo').textContent=n.split(' ')[0];
   document.getElementById('footerTxt').textContent=`© 2026 ${n}`;
   document.title=n;
@@ -963,7 +964,7 @@ function renderProduct(){
   const p=theProduct;
   if(!p){
     el.innerHTML=`<div style="text-align:center;padding:80px 20px;color:#444">
-      <span style="font-size:60px;display:block;margin-bottom:16px">👠</span>
+      <span style="font-size:60px;display:block;margin-bottom:16px">🛍</span>
       <p style="font-size:16px">المنتج لم يُضف بعد — افتح لوحة الإدارة لإضافته</p>
     </div>`;
     return;
@@ -978,7 +979,7 @@ function renderProduct(){
 
   function mainMediaHtml(idx){
     const m=media[idx]||media[0];
-    if(!m) return `<span style="font-size:100px;display:flex;align-items:center;justify-content:center;height:100%">👠</span>`;
+    if(!m) return `<span style="font-size:100px;display:flex;align-items:center;justify-content:center;height:100%">🛍</span>`;
     if(m.type==='img') return `<img src="${m.src}" alt="${p.name}" onclick="openZoom('${m.src}')">`;
     if(m.isEmbed){
       const embed=getYoutubeEmbed(m.src);
@@ -1023,7 +1024,7 @@ function renderProduct(){
     </div>
 
     <div class="prod-info">
-      <div class="prod-tag">👠 حذاء فاخر</div>
+      <div class="prod-tag" id="prodTag">${cfg.productTag||'🛍 منتج مميز'}</div>
       <div class="prod-name">${p.name}</div>
 
       <div class="prod-stars-row">
@@ -1051,7 +1052,7 @@ function renderProduct(){
       <div class="prod-color-name" id="prodColorName">${selColor?.name||p.colors[0]?.name||''}</div>`:''}
 
       ${p.sizes?.length?`
-      <div class="opt-section-title">اختر المقاس</div>
+      <div class="opt-section-title">اختر المقاس / الحجم</div>
       <div class="prod-sizes" id="prodSizes">
         ${p.sizes.map(s=>`<span class="prod-stag ${selSize===s?'sel':''}" onclick="spSelSize('${s}',this)">${s}</span>`).join('')}
       </div>`:''}
@@ -1072,7 +1073,7 @@ function renderProduct(){
           ${p.offers.map(o=>`
             <div onclick="applyOffer(${o.qty},${o.price})" style="display:flex;justify-content:space-between;align-items:center;background:#0d0d0d;border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .3s" onmouseover="this.style.borderColor='var(--gold)';this.style.background='rgba(201,168,76,.06)'" onmouseout="this.style.borderColor='rgba(201,168,76,.2)';this.style.background='#0d0d0d'">
               <div>
-                <span style="font-size:14px;font-weight:800;color:var(--gold)">${o.qty} أزواج</span>
+                <span style="font-size:14px;font-weight:800;color:var(--gold)">${o.qty} قطع</span>
                 ${p.price?`<span style="font-size:12px;color:#555;margin-right:8px;text-decoration:line-through">${(o.qty*Number(p.price)).toLocaleString()} ${cfg.cur}</span>`:''}
               </div>
               <div style="text-align:left">
@@ -1196,7 +1197,7 @@ function changeSelQty(d){
 }
 function spAddToCart(){
   const p=theProduct; if(!p) return;
-  if(p.sizes?.length&&!selSize){showToast('⚠️ اختر المقاس أولاً');return;}
+  if(p.sizes?.length&&!selSize){showToast('⚠️ اختر المقاس / الحجم أولاً');return;}
   const colorName=selColor?.name||'';
   const colorHex=selColor?.hex||'';
   // Check color-specific stock
@@ -1236,15 +1237,15 @@ function updateCartUI(){
   document.getElementById('cartTotal2').textContent=t;
   document.getElementById('checkoutBtn').disabled=!cart.length;
   const el=document.getElementById('cartList');
-  if(!cart.length){el.innerHTML='<div class="cart-empty-msg"><span>👠</span>السلة فارغة</div>';return;}
+  if(!cart.length){el.innerHTML='<div class="cart-empty-msg"><span>🛍</span>السلة فارغة</div>';return;}
   el.innerHTML=cart.map((item,idx)=>`
     <div class="ci">
-      <div class="ci-thumb">${item.images?.length?`<img src="${item.images[0]}">`:'👠'}</div>
+      <div class="ci-thumb">${item.images?.length?`<img src="${item.images[0]}">`:'🛍'}</div>
       <div class="ci-info">
         <div class="ci-name">${item.name}</div>
         <div class="ci-meta">
           ${item.color?.name?`<span class="cdot" style="background:${item.color.hex}"></span>${item.color.name}`:''}
-          ${item.size?'• مقاس '+item.size:''}
+          ${item.size?'• '+item.size:''}
           ${item.offerNote?`<span style="background:rgba(46,204,113,.1);color:var(--green);padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700">عرض</span>`:''}
         </div>
         ${item.qty>=2&&theProduct?.colors?.length>1?`<div style="margin-top:4px"><button onclick="openSecondColorModal(${cart.indexOf(item)})" style="background:none;border:1px solid #2a2a2a;color:#888;padding:3px 10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;border-radius:5px;transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#2a2a2a';this.style.color='#888'">🎨 إضافة لون ثانٍ</button>${item.color2?`<span style="font-size:11px;color:#888;margin-right:6px">+ <span class="cdot" style="background:${item.color2.hex};display:inline-block"></span> ${item.color2.name}</span>`:''}</div>`:``}
@@ -1303,10 +1304,10 @@ async function placeOrder(){
       await updateDoc(doc(db,'store','product'),{stock:Math.max(0,theProduct.stock-totalQty)});
     }
     // Telegram
-    const itemsText=orderData.items.map(i=>`▪️ ${i.name}${i.color?' ('+i.color+')':''} ${i.size?'مقاس '+i.size:''} × ${i.qty}`).join('\n');
+    const itemsText=orderData.items.map(i=>`▪️ ${i.name}${i.color?' ('+i.color+')':''} ${i.size?i.size:''} × ${i.qty}`).join('\n');
     const deliveryTypeTxt=selectedDeliveryType==='office'?'🏢 استلام من المكتب':'🏠 توصيل للمنزل';
-    const color2Text=cart.filter(i=>i.color2).map(i=>`  ↳ زوج ثانٍ: ${i.color2.name}`).join('\n');
-    await sendTelegramMsg(`👠 <b>طلب جديد!</b> — #${orderNum}\n\n👤 <b>${name}</b>\n📞 ${phone}\n📍 ${wilayaName} — ${addr}${note?'\n📝 '+note:''}\n🚚 ${deliveryTypeTxt}\n\n${itemsText}${color2Text?'\n'+color2Text:''}\n\n💰 <b>المجموع: ${orderData.total.toLocaleString()} ${cfg.cur}</b>`);
+    const color2Text=cart.filter(i=>i.color2).map(i=>`  ↳ خيار ثانٍ: ${i.color2.name}`).join('\n');
+    await sendTelegramMsg(`🛍 <b>طلب جديد!</b> — #${orderNum}\n\n👤 <b>${name}</b>\n📞 ${phone}\n📍 ${wilayaName} — ${addr}${note?'\n📝 '+note:''}\n🚚 ${deliveryTypeTxt}\n\n${itemsText}${color2Text?'\n'+color2Text:''}\n\n💰 <b>المجموع: ${orderData.total.toLocaleString()} ${cfg.cur}</b>`);
     cart=[];updateCartUI();
     document.getElementById('checkoutBox').innerHTML=`<div class="success-screen"><div class="success-icon">✅</div><h3>تم تأكيد طلبك!</h3><p>شكراً <strong style="color:var(--gold)">${name}</strong>،<br>سنتواصل معك على <strong style="color:var(--gold)">${phone}</strong> قريباً 💛</p><div class="order-num">#${orderNum}</div><button class="back-btn" onclick="closeModal('checkoutModal');resetCheckout()">العودة للمتجر</button></div>`;
   }catch(e){showToast('❌ خطأ: '+e.message);btn.disabled=false;btn.textContent='✅ تأكيد الطلب';}
@@ -1512,7 +1513,7 @@ function renderAdminOrders(){
         <span class="st-badge ${o.status==='new'?'st-new':'st-done'}">${o.status==='new'?'جديد':'تم التسليم'}</span>
       </div>
       <div class="order-customer">👤 ${o.customer?.name} | 📞 ${o.customer?.phone}<br>📍 ${o.customer?.city} — ${o.customer?.addr}${o.customer?.note?'<br>📝 '+o.customer.note:''}</div>
-      <div class="order-items">${(o.items||[]).map(i=>`• ${i.name}${i.color?' ('+i.color+')':''} ${i.color2?'+'+i.color2:''}${i.size?' مقاس '+i.size:''} × ${i.qty}${i.offerNote?' — عرض':''}  = ${(i.price*i.qty).toLocaleString()} ${cfg.cur}`).join('<br>')}</div>
+      <div class="order-items">${(o.items||[]).map(i=>`• ${i.name}${i.color?' ('+i.color+')':''} ${i.color2?'+'+i.color2:''}${i.size?' '+i.size:''} × ${i.qty}${i.offerNote?' — عرض':''}  = ${(i.price*i.qty).toLocaleString()} ${cfg.cur}`).join('<br>')}</div>
       <div class="order-total-line">💰 المجموع: ${o.total?.toLocaleString()} ${cfg.cur}</div>
       <div style="display:flex;gap:8px;margin-top:6px">
         ${o.status==='new'?`<button class="mark-done" onclick="markDone('${o.id}')">✅ تم التسليم</button>`:''}
@@ -1670,7 +1671,7 @@ function renderOfferRows(){
         <input type="number" value="${r.qty}" min="2" placeholder="الكمية"
           oninput="offerRows.find(x=>x.id==${r.id}).qty=Number(this.value)"
           style="width:70px;background:#151515;border:1px solid #252525;color:#f0ebe2;padding:8px;font-family:'Cairo',sans-serif;font-size:13px;outline:none;border-radius:6px;text-align:center">
-        <span style="font-size:12px;color:#777">زوج بـ</span>
+        <span style="font-size:12px;color:#777">قطعة بـ</span>
         <input type="number" value="${r.price}" min="0" placeholder="السعر الإجمالي"
           oninput="offerRows.find(x=>x.id==${r.id}).price=Number(this.value)"
           style="flex:1;background:#151515;border:1px solid #1a3a1a;color:#2ecc71;padding:8px;font-family:'Cairo',sans-serif;font-size:13px;outline:none;border-radius:6px;text-align:center">
@@ -1688,7 +1689,7 @@ async function saveProduct(){
   const name=document.getElementById('pName').value.trim();
   const price=document.getElementById('pPrice').value;
   if(!name||!price){showToast('⚠️ الاسم والسعر مطلوبان');return;}
-  if(activeSizes.size===0){showToast('⚠️ اختر مقاساً واحداً على الأقل');return;}
+  if(activeSizes.size===0){showToast('⚠️ اختر مقاساً / حجماً واحداً على الأقل');return;}
   const btn=document.getElementById('saveProductBtn');
   btn.disabled=true;btn.textContent='⏳ جاري الحفظ...';
   showSaving();
@@ -1783,7 +1784,7 @@ async function saveDeliveryPrices(){
 
 // ── Settings ──
 async function saveSettings(){
-  cfg.name=document.getElementById('cfgName').value.trim()||'SHOE STORE';
+  cfg.name=document.getElementById('cfgName').value.trim()||'STORE STORE';
   cfg.cur=document.getElementById('cfgCur').value.trim()||'دج';
   cfg.pass=document.getElementById('cfgPass').value;
   cfg.tgToken=document.getElementById('cfgTgToken').value.trim();
