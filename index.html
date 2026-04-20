@@ -1815,7 +1815,7 @@ async function saveDeliveryPrices(){
 
 // ── Settings ──
 async function saveSettings(){
-  cfg.name=document.getElementById('cfgName').value.trim()||'STORE STORE';
+  cfg.name=document.getElementById('cfgName').value.trim()||'SHOE STORE';
   cfg.cur=document.getElementById('cfgCur').value.trim()||'دج';
   cfg.pass=document.getElementById('cfgPass').value;
   cfg.tgToken=document.getElementById('cfgTgToken').value.trim();
@@ -1823,8 +1823,9 @@ async function saveSettings(){
   cfg.phone=document.getElementById('cfgPhone').value.trim()||'';
   cfg.officeAddr=document.getElementById('cfgOfficeAddr').value.trim()||'';
   showSaving();await saveCfgToDb();hideSaving();
-  applyConfig();closeAdmin();
-  showToast('💾 تم الحفظ');
+  applyConfig();
+  // لا نُغلق لوحة الإدارة حتى يتمكن من تحميل ملف الزبائن مباشرة
+  showToast('💾 تم الحفظ — يمكنك الآن تحميل ملف الزبائن ⬇️');
 }
 function handleLogoUpload(e){
   const file=e.target.files[0]; if(!file) return;
@@ -1862,26 +1863,22 @@ function resetFirebaseConfig(){
 function generateCustomerFile(){
   const savedCfg=getLocalCfg();
   if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً');return;}
-  fetch(location.href)
-    .then(r=>r.text())
-    .then(html=>{
-      const configStr=JSON.stringify(savedCfg);
-      const out=html.replace('window.STORE_CONFIG = null; // يُملأ تلقائياً',`window.STORE_CONFIG = ${configStr}; // injected`);
-      const blob=new Blob([out],{type:'text/html;charset=utf-8'});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download='index.html';a.click();
-      URL.revokeObjectURL(url);
-      showToast('✅ تم تحميل ملف الزبائن — ارفعه على Netlify');
-    })
-    .catch(()=>{
-      const html=document.documentElement.outerHTML;
-      const out=html.replace('window.STORE_CONFIG = null;',`window.STORE_CONFIG = ${JSON.stringify(savedCfg)};`);
-      const blob=new Blob([out],{type:'text/html;charset=utf-8'});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download='index.html';a.click();
-      URL.revokeObjectURL(url);
-      showToast('✅ تم تحميل ملف الزبائن');
-    });
+  try{
+    // نأخذ HTML الحالي من الذاكرة مباشرة — يعمل دائماً بغض النظر عن المصدر
+    let html=document.documentElement.outerHTML;
+    const configStr=JSON.stringify(savedCfg);
+    // نستبدل أي صيغة لـ STORE_CONFIG (null أو injected أو غيرها)
+    html=html.replace(/window\.STORE_CONFIG\s*=\s*(?:null|\{[^;]*\})\s*;[^\n]*/,
+      `window.STORE_CONFIG = ${configStr}; // injected`);
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='index.html';a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ تم تحميل ملف الزبائن بنجاح!');
+  }catch(e){
+    showToast('❌ خطأ: '+e.message);
+  }
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
