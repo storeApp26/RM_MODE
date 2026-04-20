@@ -96,32 +96,63 @@ nav{position:fixed;top:0;width:100%;z-index:100;display:flex;align-items:center;
 /* ── PRODUCT SECTION ── */
 section{padding:65px 28px;padding-top:calc(70px + 20px)}
 .product-page{display:grid;grid-template-columns:1fr 1fr;gap:52px;max-width:1100px;margin:0 auto;align-items:start}
+
+/* Media column — sticky on desktop only */
+.prod-media{position:sticky;top:88px}
+
+/* ── MOBILE ── */
 @media(max-width:860px){
-  .product-page{grid-template-columns:1fr;gap:16px}
-  section{padding:12px 12px 40px}
-  .prod-media{position:static;top:auto}
-  /* الصورة بنسبة مناسبة — ليست كاملة الشاشة */
-  .swiper-wrap{aspect-ratio:4/3 !important;border-radius:14px;max-height:56vw}
-  .prod-name{font-size:19px;margin-bottom:8px}
-  .prod-price{font-size:24px}
-  .prod-old-price{font-size:15px}
-  .prod-add-btn{padding:14px;font-size:14px}
-  .prod-trust{gap:6px}
-  .trust-item{font-size:10px;padding:5px 10px}
-  .prod-qty-row{margin-bottom:14px}
-  .prod-desc-box{padding:12px;font-size:12px}
-  .prod-divider{margin:12px 0}
-  .prod-tag{font-size:9px;padding:3px 10px}
-}
-@media(max-width:480px){
-  section{padding:10px 10px 36px}
-  .swiper-wrap{aspect-ratio:4/3 !important;max-height:58vw}
-  .prod-name{font-size:17px}
+  /* Layout: single column, scroll normally */
+  .product-page{display:flex;flex-direction:column;gap:0}
+  section{padding:8px 12px 50px;padding-top:calc(60px + 8px)}
+
+  /* Media: NOT sticky, normal flow */
+  .prod-media{position:static !important;top:auto !important;width:100%}
+
+  /* Swiper: compact height */
+  .swiper-wrap{
+    aspect-ratio:unset !important;
+    height:52vw !important;
+    max-height:260px !important;
+    border-radius:12px;
+    margin-bottom:14px;
+  }
+
+  /* Info section */
+  .prod-info{padding:0 2px}
+  .prod-name{font-size:18px;margin-bottom:6px}
   .prod-price{font-size:22px}
+  .prod-old-price{font-size:14px}
+  .prod-add-btn{padding:13px;font-size:14px}
+  .prod-trust{gap:5px}
+  .trust-item{font-size:10px;padding:5px 9px}
+  .prod-qty-row{margin-bottom:12px}
+  .prod-desc-box{padding:11px;font-size:12px}
+  .prod-divider{margin:10px 0}
+  .prod-tag{font-size:9px;padding:3px 9px}
+  .prod-stars-row{margin-bottom:10px}
+  .opt-section-title{font-size:10px;margin-bottom:7px}
+  .prod-sizes{gap:5px;margin-bottom:12px}
+  .prod-stag{padding:6px 12px;font-size:12px}
+  .prod-colors{gap:6px;margin-bottom:6px}
+  .prod-cswatch{width:26px;height:26px}
+  .prod-color-name{font-size:11px;margin-bottom:10px}
+  .prod-qty-label{font-size:10px}
+  .qty-ctrl button{width:32px;height:32px;font-size:16px}
+  .qty-ctrl span{font-size:14px;padding:0 10px}
 }
 
-/* Media column */
-.prod-media{position:sticky;top:88px}
+@media(max-width:480px){
+  section{padding:6px 10px 44px;padding-top:calc(58px + 6px)}
+  .swiper-wrap{
+    height:48vw !important;
+    max-height:220px !important;
+    border-radius:10px;
+  }
+  .prod-name{font-size:16px}
+  .prod-price{font-size:20px}
+  .prod-add-btn{padding:12px;font-size:13px}
+}
 
 /* ── SWIPER GALLERY ── */
 .swiper-wrap{position:relative;width:100%;aspect-ratio:1/1;border-radius:20px;overflow:hidden;background:#111;border:1px solid rgba(255,255,255,.07);box-shadow:0 16px 48px rgba(0,0,0,.6);margin-bottom:12px;touch-action:pan-y}
@@ -446,7 +477,7 @@ footer p{color:#333;font-size:12px}
     <div class="hero-tag">أزياء وأحذية — أناقة وراحة</div>
     <h1 id="heroTitle">STORE<br><span>STORE</span></h1>
     <p id="heroSub">تشكيلة حصرية من الملابس والأحذية بأجود الخامات</p>
-    <button class="hero-btn" onclick="document.getElementById('product-section').scrollIntoView({behavior:'smooth'})">اطلب الآن </button>
+    <button class="hero-btn" onclick="document.getElementById('product-section').scrollIntoView({behavior:'smooth'})">اطلب الآن 🛍</button>
   </div>
 </div>
 
@@ -454,7 +485,7 @@ footer p{color:#333;font-size:12px}
 <section id="product-section">
   <div id="productDisplay">
     <div style="text-align:center;padding:80px 20px;color:#333">
-      <span style="font-size:60px;display:block;margin-bottom:16px"></span>
+      <span style="font-size:60px;display:block;margin-bottom:16px">🛍</span>
       <p style="font-size:16px">جاري تحميل المنتج...</p>
     </div>
   </div>
