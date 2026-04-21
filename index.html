@@ -21,7 +21,7 @@ window._initFirebase = (config) => {
     return true;
   } catch(e) { return false; }
 };
-// الـ module جاهز — أبلغ الصفحة فوراً
+// أبلغ الصفحة أن الـ module جاهز
 document.dispatchEvent(new Event('moduleReady'));
 </script>
 
@@ -852,24 +852,15 @@ function tryInit(){
   document.getElementById('loadingScreen').style.display='none';
   document.getElementById('setupScreen').classList.add('show');
 }
-
-// ننتظر إشارة من الـ module (moduleReady) أو نبدأ عند load — أيهما أسرع
-let _triedInit = false;
-function _doInit(){
-  if(_triedInit) return;
-  _triedInit = true;
-  tryInit();
+let _booted=false;
+function _startBoot(){
+  if(_booted) return; _booted=true;
+  if(window._initFirebase) tryInit();
+  else { document.getElementById('loadingScreen').style.display='none'; document.getElementById('setupScreen').classList.add('show'); }
 }
-document.addEventListener('moduleReady', _doInit, {once:true});
-window.addEventListener('load', ()=>{ setTimeout(_doInit, 200); });
-// fallback: إذا لم يحدث شيء بعد 10 ثوانٍ أظهر شاشة الإعداد
-setTimeout(()=>{
-  if(!_triedInit){
-    _triedInit=true;
-    document.getElementById('loadingScreen').style.display='none';
-    document.getElementById('setupScreen').classList.add('show');
-  }
-}, 10000);
+document.addEventListener('moduleReady',_startBoot,{once:true});
+window.addEventListener('load',()=>setTimeout(_startBoot,300));
+setTimeout(()=>{ if(!_booted){ _booted=true; document.getElementById('loadingScreen').style.display='none'; document.getElementById('setupScreen').classList.add('show'); }},10000);
 
 async function bootStore(){
   try{
@@ -1871,18 +1862,20 @@ function resetFirebaseConfig(){
   localStorage.removeItem('fb_config');location.reload();
 }
 function generateCustomerFile(){
-  // استخدم localStorage أولاً، وإلا استخدم STORE_CONFIG المضمّن في الصفحة
   const savedCfg = getLocalCfg() || window.STORE_CONFIG || null;
   if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً');return;}
   try{
     let html = document.documentElement.outerHTML;
     const configStr = JSON.stringify(savedCfg);
-    // استبدل أي صيغة لـ STORE_CONFIG سواء null أو injected
-    html = html.replace(
-      /window\.STORE_CONFIG\s*=\s*(?:null|\{[\s\S]*?\})\s*;[^
-]*/,
-      'window.STORE_CONFIG = ' + configStr + '; // injected'
-    );
+    const marker = 'window.STORE_CONFIG = ';
+    const start = html.indexOf(marker);
+    if(start !== -1){
+      const end = html.indexOf(';', start);
+      const comment = html.indexOf('//', end);
+      const lineEnd = html.indexOf('\n', end);
+      const replaceEnd = (comment !== -1 && comment < lineEnd) ? lineEnd : end + 1;
+      html = html.substring(0, start) + marker + configStr + '; // injected' + html.substring(replaceEnd);
+    }
     const blob = new Blob([html], {type:'text/html;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
