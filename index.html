@@ -1815,7 +1815,7 @@ async function saveDeliveryPrices(){
 
 // ── Settings ──
 async function saveSettings(){
-  cfg.name=document.getElementById('cfgName').value.trim()||'SHOE STORE';
+  cfg.name=document.getElementById('cfgName').value.trim()||'STORE STORE';
   cfg.cur=document.getElementById('cfgCur').value.trim()||'دج';
   cfg.pass=document.getElementById('cfgPass').value;
   cfg.tgToken=document.getElementById('cfgTgToken').value.trim();
@@ -1824,7 +1824,6 @@ async function saveSettings(){
   cfg.officeAddr=document.getElementById('cfgOfficeAddr').value.trim()||'';
   showSaving();await saveCfgToDb();hideSaving();
   applyConfig();
-  // لا نُغلق لوحة الإدارة حتى يتمكن من تحميل ملف الزبائن مباشرة
   showToast('💾 تم الحفظ — يمكنك الآن تحميل ملف الزبائن ⬇️');
 }
 function handleLogoUpload(e){
@@ -1861,23 +1860,26 @@ function resetFirebaseConfig(){
   localStorage.removeItem('fb_config');location.reload();
 }
 function generateCustomerFile(){
-  const savedCfg=getLocalCfg();
+  // استخدم localStorage أولاً، وإلا استخدم STORE_CONFIG المضمّن في الصفحة
+  const savedCfg = getLocalCfg() || window.STORE_CONFIG || null;
   if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً');return;}
   try{
-    // نأخذ HTML الحالي من الذاكرة مباشرة — يعمل دائماً بغض النظر عن المصدر
-    let html=document.documentElement.outerHTML;
-    const configStr=JSON.stringify(savedCfg);
-    // نستبدل أي صيغة لـ STORE_CONFIG (null أو injected أو غيرها)
-    html=html.replace(/window\.STORE_CONFIG\s*=\s*(?:null|\{[^;]*\})\s*;[^\n]*/,
-      `window.STORE_CONFIG = ${configStr}; // injected`);
-    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download='index.html';a.click();
+    let html = document.documentElement.outerHTML;
+    const configStr = JSON.stringify(savedCfg);
+    // استبدل أي صيغة لـ STORE_CONFIG سواء null أو injected
+    html = html.replace(
+      /window\.STORE_CONFIG\s*=\s*(?:null|\{[\s\S]*?\})\s*;[^
+]*/,
+      'window.STORE_CONFIG = ' + configStr + '; // injected'
+    );
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'index.html'; a.click();
     URL.revokeObjectURL(url);
     showToast('✅ تم تحميل ملف الزبائن بنجاح!');
   }catch(e){
-    showToast('❌ خطأ: '+e.message);
+    showToast('❌ خطأ: ' + e.message);
   }
 }
 
