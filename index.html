@@ -21,6 +21,8 @@ window._initFirebase = (config) => {
     return true;
   } catch(e) { return false; }
 };
+// الـ module جاهز — أبلغ الصفحة فوراً
+document.dispatchEvent(new Event('moduleReady'));
 </script>
 
 <style>
@@ -850,15 +852,24 @@ function tryInit(){
   document.getElementById('loadingScreen').style.display='none';
   document.getElementById('setupScreen').classList.add('show');
 }
-window.addEventListener('load',()=>{
-  if(window._initFirebase){ tryInit(); return; }
-  let tries=0;
-  const iv=setInterval(()=>{
-    tries++;
-    if(window._initFirebase){ clearInterval(iv); tryInit(); }
-    else if(tries>50){ clearInterval(iv); document.getElementById('loadingScreen').style.display='none'; document.getElementById('setupScreen').classList.add('show'); }
-  },100);
-});
+
+// ننتظر إشارة من الـ module (moduleReady) أو نبدأ عند load — أيهما أسرع
+let _triedInit = false;
+function _doInit(){
+  if(_triedInit) return;
+  _triedInit = true;
+  tryInit();
+}
+document.addEventListener('moduleReady', _doInit, {once:true});
+window.addEventListener('load', ()=>{ setTimeout(_doInit, 200); });
+// fallback: إذا لم يحدث شيء بعد 10 ثوانٍ أظهر شاشة الإعداد
+setTimeout(()=>{
+  if(!_triedInit){
+    _triedInit=true;
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('setupScreen').classList.add('show');
+  }
+}, 10000);
 
 async function bootStore(){
   try{
@@ -1824,7 +1835,7 @@ async function saveSettings(){
   cfg.officeAddr=document.getElementById('cfgOfficeAddr').value.trim()||'';
   showSaving();await saveCfgToDb();hideSaving();
   applyConfig();
-  showToast('💾 تم الحفظ — يمكنك الآن تحميل ملف الزبائن ↓');
+  showToast('💾 تم الحفظ — يمكنك الآن تحميل ملف الزبائن ⬇️');
 }
 function handleLogoUpload(e){
   const file=e.target.files[0]; if(!file) return;
@@ -1860,42 +1871,26 @@ function resetFirebaseConfig(){
   localStorage.removeItem('fb_config');location.reload();
 }
 function generateCustomerFile(){
-  const savedCfg=getLocalCfg();
-  if(!savedCfg||!savedCfg.apiKey){
-    showToast('⚠️ احفظ الإعدادات أولاً ثم اضغط التحميل');
-    return;
-  }
-  showToast('⏳ جاري توليد الملف...');
+  // استخدم localStorage أولاً، وإلا استخدم STORE_CONFIG المضمّن في الصفحة
+  const savedCfg = getLocalCfg() || window.STORE_CONFIG || null;
+  if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً');return;}
   try{
-    // Get current page HTML
-    const html=document.documentElement.outerHTML;
-    const configStr=JSON.stringify(savedCfg);
-    // Replace any existing STORE_CONFIG value (null or previous config)
-    let out=html.replace(
-      /window\.STORE_CONFIG\s*=\s*[^;]+;[^
+    let html = document.documentElement.outerHTML;
+    const configStr = JSON.stringify(savedCfg);
+    // استبدل أي صيغة لـ STORE_CONFIG سواء null أو injected
+    html = html.replace(
+      /window\.STORE_CONFIG\s*=\s*(?:null|\{[\s\S]*?\})\s*;[^
 ]*/,
-      `window.STORE_CONFIG = ${configStr}; // injected`
+      'window.STORE_CONFIG = ' + configStr + '; // injected'
     );
-    // Also ensure the injected flag text is correct
-    if(!out.includes('window.STORE_CONFIG = '+configStr)){
-      out=html.replace(
-        /window\.STORE_CONFIG\s*=[^;]*;/,
-        `window.STORE_CONFIG = ${configStr};`
-      );
-    }
-    const blob=new Blob([out],{type:'text/html;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='index.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'index.html'; a.click();
     URL.revokeObjectURL(url);
-    setTimeout(()=>showToast('✅ تم تحميل ملف الزبائن — ارفعه على Netlify'),500);
+    showToast('✅ تم تحميل ملف الزبائن بنجاح!');
   }catch(e){
-    showToast('❌ خطأ: '+e.message);
-    console.error(e);
+    showToast('❌ خطأ: ' + e.message);
   }
 }
 
