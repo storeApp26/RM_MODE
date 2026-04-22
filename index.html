@@ -19,10 +19,8 @@ window._initFirebase = (config) => {
     window._fbReady = true;
     document.dispatchEvent(new Event('fbReady'));
     return true;
-  } catch(e) { return false; }
+  } catch(e) { console.error('Firebase init error:',e); return false; }
 };
-// الـ module جاهز — نضع علامة فقط
-window._moduleReady = true;
 </script>
 
 <style>
@@ -838,46 +836,61 @@ function setLocalCfg(c){ localStorage.setItem('fb_config',JSON.stringify(c)); }
 function showSaving(){ document.getElementById('savingIndicator').classList.add('show'); }
 function hideSaving(){ document.getElementById('savingIndicator').classList.remove('show'); }
 
-function tryInit(){
+// ══ BOOT LOGIC ══
+// ننتظر حتى window._initFirebase AND window._fb كلاهما جاهزان
+// لأن type="module" يُعرّف _initFirebase لكن _fb يحتاج إكمال import
+function tryBoot(){
+  // جرّب localStorage أولاً
   const saved=getLocalCfg();
-  const isValid=saved&&saved.apiKey&&saved.apiKey.length>10&&saved.projectId;
-  if(isValid){
+  if(saved&&saved.apiKey&&saved.apiKey.length>10&&saved.projectId){
     const ok=window._initFirebase(saved);
-    if(ok){ bootStore(); return; }
+    if(ok){ waitForFb(bootStore); return; }
   }
+  // جرّب STORE_CONFIG المضمّن
   const embedded=window.STORE_CONFIG||null;
   if(embedded&&embedded.apiKey){
     const ok=window._initFirebase(embedded);
-    if(ok){ bootStore(); return; }
+    if(ok){ waitForFb(bootStore); return; }
   }
+  // لا يوجد config — شاشة الإعداد
   document.getElementById('loadingScreen').style.display='none';
   document.getElementById('setupScreen').classList.add('show');
 }
-// Boot: polling ينتظر window._initFirebase (يأتي بعد اكتمال module)
-let _booted=false;
-(function waitForFirebase(){
-  if(_booted) return;
+
+// ينتظر حتى window._fb جاهز فعلاً ثم يستدعي cb
+function waitForFb(cb){
+  if(window._fb){ cb(); return; }
+  var n=0;
+  var iv=setInterval(function(){
+    n++;
+    if(window._fb){ clearInterval(iv); cb(); }
+    else if(n>100){ // 10 ثوانٍ
+      clearInterval(iv);
+      document.getElementById('loadingScreen').style.display='none';
+      document.getElementById('setupScreen').classList.add('show');
+    }
+  },100);
+}
+
+// ننتظر _initFirebase ثم نبدأ
+var _bootDone=false;
+var _bootIv=setInterval(function(){
+  if(_bootDone) return;
   if(window._initFirebase){
-    _booted=true;
-    tryInit();
-  } else if(window._waitCount===undefined){
-    window._waitCount=0;
-    var iv=setInterval(function(){
-      window._waitCount++;
-      if(window._initFirebase){
-        clearInterval(iv);
-        if(!_booted){_booted=true;tryInit();}
-      } else if(window._waitCount>150){ // 15 ثانية
-        clearInterval(iv);
-        if(!_booted){
-          _booted=true;
-          document.getElementById('loadingScreen').style.display='none';
-          document.getElementById('setupScreen').classList.add('show');
-        }
-      }
-    },100);
+    clearInterval(_bootIv);
+    _bootDone=true;
+    tryBoot();
   }
-})();
+},50);
+// timeout نهائي 20 ثانية
+setTimeout(function(){
+  if(!_bootDone){
+    clearInterval(_bootIv);
+    _bootDone=true;
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('setupScreen').classList.add('show');
+  }
+},20000);
 
 async function bootStore(){
   try{
@@ -1158,7 +1171,7 @@ function swiperGo(idx){
   idx=((idx%total)+total)%total;
   currentMediaIdx=idx;
   const track=document.getElementById('swiperTrack');
-  if(track) track.style.transform=`translateX(${idx*-100}%)`;
+  if(track) track.style.transform=`translateX(${idx*100}%)`;  // RTL: positive direction
   document.querySelectorAll('.swiper-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
   document.querySelectorAll('.thumb').forEach((t,i)=>t.classList.toggle('active',i===idx));
 }
