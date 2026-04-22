@@ -21,8 +21,6 @@ window._initFirebase = (config) => {
     return true;
   } catch(e) { return false; }
 };
-// الـ module جاهز — نضع علامة فقط
-window._moduleReady = true;
 </script>
 
 <style>
@@ -111,11 +109,11 @@ section{padding:65px 28px;padding-top:calc(70px + 20px)}
   /* Media: NOT sticky, normal flow */
   .prod-media{position:static !important;top:auto !important;width:100%}
 
-  /* Swiper: صورة كاملة على الموبايل */
+  /* Swiper: compact height */
   .swiper-wrap{
-    aspect-ratio:1/1 !important;
-    height:auto !important;
-    max-height:none !important;
+    aspect-ratio:unset !important;
+    height:52vw !important;
+    max-height:260px !important;
     border-radius:12px;
     margin-bottom:14px;
   }
@@ -147,9 +145,8 @@ section{padding:65px 28px;padding-top:calc(70px + 20px)}
 @media(max-width:480px){
   section{padding:6px 10px 44px;padding-top:calc(58px + 6px)}
   .swiper-wrap{
-    aspect-ratio:1/1 !important;
-    height:auto !important;
-    max-height:none !important;
+    height:48vw !important;
+    max-height:220px !important;
     border-radius:10px;
   }
   .prod-name{font-size:16px}
@@ -830,10 +827,6 @@ let formVideoSrc='';
 let selectedDeliveryType='home';
 
 window.STORE_CONFIG = {"apiKey":"AIzaSyCp8yqnWJ2UNcEjpQsX3Rv0cWpzN_KjCMc","authDomain":"shopix-b371d.firebaseapp.com","projectId":"shopix-b371d","storageBucket":"shopix-b371d.firebasestorage.app","messagingSenderId":"319129864766","appId":"1:319129864766:web:dcd305ee41ef095da69f6f"}; // injected
-// حفظ تلقائي في localStorage
-(function(){try{if(window.STORE_CONFIG&&window.STORE_CONFIG.apiKey){localStorage.setItem('fb_config',JSON.stringify(window.STORE_CONFIG));}}catch(e){}})();
-// حفظ تلقائي في localStorage حتى يعمل getLocalCfg() دائماً
-(function(){try{if(window.STORE_CONFIG&&window.STORE_CONFIG.apiKey){localStorage.setItem('fb_config',JSON.stringify(window.STORE_CONFIG));}}catch(e){}})();
 
 // ══ FIREBASE ══
 function onFbReady(cb){ if(window._fbReady) cb(); else document.addEventListener('fbReady',cb,{once:true}); }
@@ -844,29 +837,28 @@ function hideSaving(){ document.getElementById('savingIndicator').classList.remo
 
 function tryInit(){
   const saved=getLocalCfg();
-  if(saved&&saved.apiKey){
+  const isValid=saved&&saved.apiKey&&saved.apiKey.length>10&&saved.projectId;
+  if(isValid){
     const ok=window._initFirebase(saved);
-    if(ok){
-      var n=0,iv=setInterval(function(){
-        n++;
-        if(window._fb||n>100){clearInterval(iv);bootStore();}
-      },50);
-      return;
-    }
+    if(ok){ onFbReady(bootStore); return; }
+  }
+  const embedded=window.STORE_CONFIG||null;
+  if(embedded&&embedded.apiKey){
+    const ok=window._initFirebase(embedded);
+    if(ok){ onFbReady(bootStore); return; }
   }
   document.getElementById('loadingScreen').style.display='none';
   document.getElementById('setupScreen').classList.add('show');
 }
-var _bi=setInterval(function(){
-  if(window._initFirebase){clearInterval(_bi);tryInit();}
-},50);
-setTimeout(function(){
-  clearInterval(_bi);
-  if(document.getElementById('loadingScreen').style.display!=='none'){
-    document.getElementById('loadingScreen').style.display='none';
-    if(!window._fb) document.getElementById('setupScreen').classList.add('show');
-  }
-},15000);
+window.addEventListener('load',()=>{
+  if(window._initFirebase){ tryInit(); return; }
+  let tries=0;
+  const iv=setInterval(()=>{
+    tries++;
+    if(window._initFirebase){ clearInterval(iv); tryInit(); }
+    else if(tries>50){ clearInterval(iv); document.getElementById('loadingScreen').style.display='none'; document.getElementById('setupScreen').classList.add('show'); }
+  },100);
+});
 
 async function bootStore(){
   try{
@@ -1147,7 +1139,7 @@ function swiperGo(idx){
   idx=((idx%total)+total)%total;
   currentMediaIdx=idx;
   const track=document.getElementById('swiperTrack');
-  if(track) track.style.transform=`translateX(${idx*100}%)`;
+  if(track) track.style.transform=`translateX(${idx*-100}%)`;
   document.querySelectorAll('.swiper-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
   document.querySelectorAll('.thumb').forEach((t,i)=>t.classList.toggle('active',i===idx));
 }
@@ -1832,7 +1824,7 @@ async function saveSettings(){
   cfg.officeAddr=document.getElementById('cfgOfficeAddr').value.trim()||'';
   showSaving();await saveCfgToDb();hideSaving();
   applyConfig();
-  showToast('💾 تم الحفظ — يمكنك الآن تحميل ملف الزبائن ⬇️');
+  showToast('💾 تم الحفظ بنجاح ✅');
 }
 function handleLogoUpload(e){
   const file=e.target.files[0]; if(!file) return;
@@ -1868,28 +1860,30 @@ function resetFirebaseConfig(){
   localStorage.removeItem('fb_config');location.reload();
 }
 function generateCustomerFile(){
-  const savedCfg = getLocalCfg() || window.STORE_CONFIG || null;
-  if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً');return;}
+  const savedCfg=getLocalCfg();
+  if(!savedCfg||!savedCfg.apiKey){showToast('⚠️ احفظ الإعدادات أولاً ثم حاول مجدداً');return;}
+  // استخدم outerHTML مباشرة — أكثر موثوقية من fetch على GitHub Pages
   try{
-    let html = document.documentElement.outerHTML;
-    const configStr = JSON.stringify(savedCfg);
-    const marker = 'window.STORE_CONFIG = ';
-    const start = html.indexOf(marker);
-    if(start !== -1){
-      const end = html.indexOf(';', start);
-      const comment = html.indexOf('//', end);
-      const lineEnd = html.indexOf('\n', end);
-      const replaceEnd = (comment !== -1 && comment < lineEnd) ? lineEnd : end + 1;
-      html = html.substring(0, start) + marker + configStr + '; // injected' + html.substring(replaceEnd);
+    const configStr=JSON.stringify(savedCfg);
+    const html=document.documentElement.outerHTML;
+    // حاول الاستبدال بالتعليق أولاً، ثم بدونه كـ fallback
+    let out=html.replace('window.STORE_CONFIG = null; // يُملأ تلقائياً',`window.STORE_CONFIG = ${configStr}; // injected`);
+    if(out===html){
+      // fallback: استبدل بدون التعليق
+      out=html.replace('window.STORE_CONFIG = null;',`window.STORE_CONFIG = ${configStr};`);
     }
-    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'index.html'; a.click();
+    const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='index.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast('✅ تم تحميل ملف الزبائن بنجاح!');
+    showToast('✅ تم تحميل ملف الزبائن — ارفعه على Netlify');
   }catch(e){
-    showToast('❌ خطأ: ' + e.message);
+    showToast('❌ خطأ في التحميل: '+e.message);
   }
 }
 
