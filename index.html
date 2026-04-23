@@ -1869,15 +1869,11 @@ function resetFirebaseConfig(){
   localStorage.removeItem('fb_config');location.reload();
 }
 function generateCustomerFile(){
-  const savedCfg = getLocalCfg() || window.STORE_CONFIG;
-
-  if(!savedCfg || !savedCfg.apiKey){
+  const savedCfg=getLocalCfg();
+  if(!savedCfg||!savedCfg.apiKey){
     showToast('⚠️ احفظ الإعدادات أولاً');
     return;
   }
-
-  // تابع الكود عادي هنا
-}
   showToast('⏳ جاري توليد الملف...');
   try{
     const html=document.documentElement.outerHTML;
